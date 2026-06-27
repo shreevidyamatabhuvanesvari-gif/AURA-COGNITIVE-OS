@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>AURA — स्थानीय बुद्धिमान सहायक तंत्र</title>
+  <meta
+    name="description"
+    content="AURA एक स्थानीय, हिंदी-केंद्रित, स्मरण रखने वाला, सीखने वाला और तर्क करने वाला सहायक तंत्र है।"
+  >
+  <meta name="theme-color" content="#0f172a">
+  <meta name="color-scheme" content="dark light">
+
+  <link rel="icon" href="./assets/icons/aura.ico">
+  <link rel="stylesheet" href="./assets/css/aura-console.css">
+
+  <meta name="robots" content="noindex,nofollow">
+</head>
+
+<body>
+  <a class="skip-link" href="#main-content">मुख्य सामग्री पर जाएँ</a>
+
+  <div id="app">
+    <header class="app-header" role="banner">
+      <div class="brand">
+        <h1>AURA <span class="version">v1.0</span></h1>
+        <p class="subtitle">स्थानीय बुद्धिमान सहायक तंत्र</p>
+      </div>
+
+      <div class="system-status" aria-live="polite" aria-atomic="true">
+        <span id="systemIndicator" class="status-dot offline" aria-hidden="true"></span>
+        <span id="systemStatus">प्रारम्भ हो रहा है...</span>
+      </div>
+    </header>
+
+    <section class="status-bar" role="status" aria-label="तंत्र स्थिति पट्टी">
+      <div>
+        परत<br>
+        <strong id="engineStatus">अभी बंद</strong>
+      </div>
+      <div>
+        आरम्भ<br>
+        <strong id="bootTime">--</strong>
+      </div>
+      <div>
+        आदेश<br>
+        <strong id="commandCount">0</strong>
+      </div>
+      <div>
+        स्मृति<br>
+        <strong id="memoryStatus">सक्रिय नहीं</strong>
+      </div>
+    </section>
+
+    <nav class="toolbar" role="navigation" aria-label="सहायक उपकरण पट्टी">
+      <button id="executeButton" type="button" class="button-primary">चलाएँ</button>
+      <button id="copyButton" type="button" class="button-secondary">प्रतिलिपि</button>
+      <button id="clearButton" type="button" class="button-secondary">साफ़ करें</button>
+      <button id="downloadButton" type="button" class="button-secondary">डाउनलोड</button>
+    </nav>
+
+    <main class="console-layout" id="main-content">
+      <section class="command-panel" aria-label="आदेश इनपुट">
+        <label for="commandInput">आदेश</label>
+        <textarea
+          id="commandInput"
+          name="commandInput"
+          placeholder="यहाँ आदेश लिखें..."
+          autocomplete="off"
+          spellcheck="false"
+          aria-describedby="shortcutInfo characterCount"
+        ></textarea>
+
+        <div class="command-info">
+          <span id="characterCount">अक्षर : 0</span>
+          <span id="shortcutInfo">Ctrl + Enter = चलाएँ</span>
+        </div>
+      </section>
+
+      <section class="output-panel" aria-label="आदेश परिणाम">
+        <div class="output-header">
+          <h2>परिणाम</h2>
+          <span id="executionTime">तैयार</span>
+        </div>
+
+        <pre
+          id="outputConsole"
+          aria-live="polite"
+          aria-atomic="true"
+        >आदेश की प्रतीक्षा है...</pre>
+      </section>
+    </main>
+
+    <div id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <div
+      id="modalContainer"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    ></div>
+
+    <footer class="app-footer">
+      <span>AURA स्थानीय सहायक तंत्र</span>
+      <span id="buildVersion">निर्माण: 1.0.0</span>
+    </footer>
+  </div>
+
+  <noscript>
+    इस तंत्र को चलाने के लिए जावास्क्रिप्ट आवश्यक है।
+  </noscript>
+
+  <script type="module" src="./assets/js/aura-bootstrap.js"></script>
+</body>
+</html>
