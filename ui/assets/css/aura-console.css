@@ -1,0 +1,348 @@
+/* ==========================================================
+   AURA Console Stylesheet
+   Version: 1.0.0
+   ========================================================== */
+
+:root {
+  --bg: #0f172a;
+  --bg-secondary: #111827;
+  --surface: #1e293b;
+  --surface-hover: #334155;
+
+  --text: #e5e7eb;
+  --text-muted: #94a3b8;
+
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  --border: #334155;
+
+  --radius: 12px;
+  --shadow:
+    0 10px 30px rgba(0, 0, 0, 0.35);
+
+  --font:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  background: var(--bg);
+  color: var(--text);
+
+  font-family: var(--font);
+  line-height: 1.5;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ==========================================================
+   Accessibility
+   ========================================================== */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 1rem;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  z-index: 9999;
+
+  background: var(--primary);
+  color: #ffffff;
+
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================================
+   Layout
+   ========================================================== */
+
+#app {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 1rem;
+
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+
+  background: var(--bg-secondary);
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.version {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--text-muted);
+}
+
+.system-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.status-dot.offline {
+  background: var(--danger);
+}
+
+.status-dot.online {
+  background: var(--success);
+}
+
+.status-bar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.status-bar div {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+/* ==========================================================
+   Toolbar
+   ========================================================== */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+
+  padding: 1rem 1.5rem;
+}
+
+.button-primary,
+.button-secondary {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  padding: 0.75rem 1rem;
+
+  color: var(--text);
+  background: var(--surface);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.button-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.button-primary:hover {
+  background: var(--primary-hover);
+}
+
+.button-secondary:hover {
+  background: var(--surface-hover);
+}
+
+.button-primary:active,
+.button-secondary:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================
+   Console
+   ========================================================== */
+
+.console-layout {
+  flex: 1;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  padding: 1.5rem;
+}
+
+.command-panel,
+.output-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  padding: 1rem;
+}
+
+.command-panel label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+#commandInput {
+  width: 100%;
+  min-height: 18rem;
+
+  resize: vertical;
+
+  padding: 1rem;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  background: var(--bg-secondary);
+  color: var(--text);
+}
+
+.command-info,
+.output-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  margin-top: 0.75rem;
+  color: var(--text-muted);
+}
+
+#outputConsole {
+  min-height: 22rem;
+  margin-top: 1rem;
+
+  padding: 1rem;
+
+  overflow: auto;
+
+  border-radius: var(--radius);
+
+  background: var(--bg-secondary);
+  color: var(--text);
+
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ==========================================================
+   Footer
+   ========================================================== */
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+
+  color: var(--text-muted);
+}
+
+/* ==========================================================
+   Utility Containers
+   ========================================================== */
+
+#toastContainer,
+#modalContainer {
+  position: fixed;
+  z-index: 1000;
+}
+
+/* ==========================================================
+   Responsive
+   ========================================================== */
+
+@media (max-width: 900px) {
+  .console-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .status-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .app-header,
+  .app-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .status-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar {
+    flex-direction: column;
+  }
+
+  .button-primary,
+  .button-secondary {
+    width: 100%;
+  }
+}
