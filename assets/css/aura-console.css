@@ -1,27 +1,28 @@
 :root {
   color-scheme: dark;
 
-  --bg: #07111f;
-  --bg-2: #0b1729;
-  --panel: #10203a;
-  --panel-2: #152844;
-  --panel-3: #1b3257;
+  --bg: #0b1220;
+  --bg-elevated: #101a2e;
+  --surface: #162238;
+  --surface-2: #1c2a44;
+  --surface-3: #223252;
 
-  --text: #eef4ff;
-  --text-muted: #a7b4cc;
-  --text-soft: #d8e2ff;
+  --text: #eef2ff;
+  --text-muted: #9aa7c2;
+  --text-soft: #c7d2fe;
 
   --border: rgba(148, 163, 184, 0.22);
 
   --primary: #60a5fa;
-  --primary-2: #2563eb;
   --primary-hover: #3b82f6;
+  --primary-strong: #2563eb;
 
   --success: #22c55e;
+  --warning: #f59e0b;
   --danger: #ef4444;
 
-  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 12px 28px rgba(0, 0, 0, 0.22);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.24);
 
   --radius-xl: 24px;
   --radius-lg: 18px;
@@ -29,7 +30,7 @@
   --radius-sm: 10px;
 
   --content-width: 1180px;
-  --page-gap: clamp(0.75rem, 2vw, 1.25rem);
+  --page-pad: clamp(0.85rem, 2vw, 1.5rem);
 
   --font-sans:
     system-ui,
@@ -57,14 +58,14 @@
 html {
   min-height: 100%;
   background:
-    radial-gradient(circle at top, rgba(96, 165, 250, 0.14), transparent 30%),
-    linear-gradient(180deg, #09101b 0%, #06101c 100%);
+    radial-gradient(circle at top, rgba(96, 165, 250, 0.18), transparent 28%),
+    linear-gradient(180deg, #0b1220 0%, #09101b 100%);
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  padding: var(--page-gap);
+  padding: var(--page-pad);
 
   display: flex;
   justify-content: center;
@@ -89,13 +90,13 @@ button {
 
 img,
 svg {
-  display: block;
   max-width: 100%;
+  display: block;
 }
 
 ::selection {
   background: rgba(96, 165, 250, 0.35);
-  color: #fff;
+  color: #ffffff;
 }
 
 :focus-visible {
@@ -125,14 +126,15 @@ svg {
 #app {
   width: min(var(--content-width), 100%);
   margin-inline: auto;
+
   overflow: hidden;
 
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
 
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 18%),
-    var(--bg-2);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 20%),
+    var(--bg-elevated);
 
   box-shadow: var(--shadow-lg);
   backdrop-filter: blur(10px);
@@ -149,13 +151,16 @@ svg {
   padding: 1.1rem 1.25rem;
   border-bottom: 1px solid var(--border);
 
-  background: var(--panel);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 100%),
+    var(--surface);
 }
 
 .brand h1 {
   margin: 0;
-  font-size: clamp(1.7rem, 3vw, 2.25rem);
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
   line-height: 1.05;
+  letter-spacing: 0.02em;
 }
 
 .version {
@@ -179,7 +184,7 @@ svg {
   border: 1px solid var(--border);
   border-radius: 999px;
 
-  background: rgba(15, 23, 42, 0.62);
+  background: rgba(15, 23, 42, 0.55);
   box-shadow: var(--shadow-md);
   white-space: nowrap;
 }
@@ -201,7 +206,7 @@ svg {
   box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
 }
 
-/* Status bar */
+/* Status Bar */
 
 .status-bar {
   display: grid;
@@ -210,6 +215,8 @@ svg {
 
   padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--border);
+
+  background: rgba(255, 255, 255, 0.01);
 }
 
 .status-bar div {
@@ -222,7 +229,7 @@ svg {
 
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: var(--panel);
+  background: var(--surface);
   box-shadow: var(--shadow-md);
 }
 
@@ -240,6 +247,8 @@ svg {
 
   padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--border);
+
+  background: rgba(255, 255, 255, 0.01);
 }
 
 .button-primary,
@@ -258,13 +267,13 @@ svg {
 }
 
 .button-primary {
-  background: linear-gradient(180deg, var(--primary), var(--primary-2));
-  color: #ffffff;
+  background: linear-gradient(180deg, var(--primary), var(--primary-strong));
+  color: #fff;
   box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22);
 }
 
 .button-secondary {
-  background: var(--panel-2);
+  background: var(--surface-2);
   color: var(--text);
   border-color: var(--border);
 }
@@ -274,7 +283,7 @@ svg {
 }
 
 .button-secondary:hover {
-  background: var(--panel-3);
+  background: var(--surface-3);
 }
 
 .button-primary:active,
@@ -288,7 +297,7 @@ svg {
   outline-offset: 2px;
 }
 
-/* Console layout */
+/* Main Console */
 
 .console-layout {
   display: grid;
@@ -300,11 +309,16 @@ svg {
 
 .command-panel,
 .output-panel {
-  padding: 1rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: var(--panel);
+
+  background: var(--surface);
   box-shadow: var(--shadow-md);
+}
+
+.command-panel,
+.output-panel {
+  padding: 1rem;
 }
 
 .command-panel label {
@@ -324,7 +338,7 @@ svg {
   border: 1px solid rgba(148, 163, 184, 0.28);
   border-radius: var(--radius-md);
 
-  background: #091424;
+  background: #0b1324;
   color: var(--text);
   font-family: var(--font-mono);
   font-size: 0.98rem;
@@ -338,7 +352,7 @@ svg {
 }
 
 #commandInput:focus {
-  border-color: rgba(96, 165, 250, 0.75);
+  border-color: rgba(96, 165, 250, 0.7);
   outline: none;
 }
 
@@ -373,7 +387,7 @@ svg {
   border-radius: var(--radius-md);
   border: 1px solid rgba(148, 163, 184, 0.22);
 
-  background: #07101c;
+  background: #08101f;
   color: var(--text);
   font-family: var(--font-mono);
   font-size: 0.96rem;
@@ -382,7 +396,7 @@ svg {
   word-break: break-word;
 }
 
-/* Toast / modal */
+/* Toast / Modal */
 
 #toastContainer {
   position: fixed;
@@ -407,7 +421,7 @@ svg {
   padding: 1rem 1.25rem;
   border-top: 1px solid var(--border);
 
-  background: var(--panel);
+  background: var(--surface);
   color: var(--text-muted);
   font-size: 0.92rem;
 }
@@ -425,10 +439,6 @@ svg {
 }
 
 @media (max-width: 720px) {
-  body {
-    align-items: flex-start;
-  }
-
   .app-header,
   .app-footer {
     flex-direction: column;
