@@ -2,10 +2,7 @@
 <html lang="hi">
 <head>
   <meta charset="utf-8">
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1,viewport-fit=cover"
-  >
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <title>AURA — स्थानीय बुद्धिमान सहायक तंत्र</title>
@@ -113,14 +110,11 @@
 
   <noscript>इस तंत्र को चलाने के लिए जावास्क्रिप्ट आवश्यक है।</noscript>
 
+  <!-- Production bootstrap -->
   <script type="module" src="./assets/js/aura-bootstrap.js"></script>
 
+  <!-- URL-driven test router for GitHub Pages -->
   <script type="module">
-    /**
-     * URL-driven diagnostics router.
-     * No buttons, no per-file test pages, no extra per-module test script additions.
-     */
-
     const params = new URLSearchParams(window.location.search);
     const mode = String(params.get("mode") ?? "").trim().toLowerCase();
     const testFlag = String(params.get("test") ?? "").trim().toLowerCase();
@@ -131,11 +125,11 @@
       testFlag === "yes";
 
     if (!isTestMode) {
-      // Normal application mode: do nothing.
+      // Normal application mode.
     } else {
       document.documentElement.dataset.auraMode = "test";
 
-      const output = document.getElementById("outputConsole");
+      const outputConsole = document.getElementById("outputConsole");
       const systemStatus = document.getElementById("systemStatus");
       const systemIndicator = document.getElementById("systemIndicator");
       const executionTime = document.getElementById("executionTime");
@@ -149,12 +143,21 @@
       };
 
       const render = (payload) => {
-        const value = typeof payload === "string"
-          ? payload
-          : JSON.stringify(payload, null, 2);
+        if (!outputConsole) return;
 
-        if (output) {
-          output.textContent = value;
+        if (typeof payload === "string") {
+          outputConsole.textContent = payload;
+          return;
+        }
+
+        outputConsole.textContent = JSON.stringify(payload, null, 2);
+      };
+
+      const safeJsonClone = (value) => {
+        try {
+          return JSON.parse(JSON.stringify(value));
+        } catch {
+          return value;
         }
       };
 
@@ -210,67 +213,69 @@
         return value;
       };
 
-      const waitForAuraReady = async (timeoutMs = 15000) => {
+      const waitForReady = async (timeoutMs = 15000) => {
         const ready = window.AURA?.ready ?? window.AURA?.boot?.();
 
         if (!ready) {
           throw new Error("AURA bootstrap is not available.");
         }
 
+        let timerId;
         const timeout = new Promise((_, reject) => {
-          window.setTimeout(() => {
+          timerId = window.setTimeout(() => {
             reject(new Error(`AURA readiness timed out after ${timeoutMs} ms.`));
           }, timeoutMs);
         });
 
-        return Promise.race([Promise.resolve(ready), timeout]);
+        try {
+          return await Promise.race([Promise.resolve(ready), timeout]);
+        } finally {
+          if (timerId !== undefined) {
+            window.clearTimeout(timerId);
+          }
+        }
       };
 
-      const action = String(
-        params.get("action") ??
-        (params.has("module") ? "import" : "boot")
-      ).trim().toLowerCase();
+      const action = String(params.get("action") ?? (params.has("module") ? "import" : "boot"))
+        .trim()
+        .toLowerCase();
 
       const startedAt = performance.now();
-
       setStatus("परीक्षण मोड", false);
 
       const run = async () => {
-        await waitForAuraReady();
+        await waitForReady();
 
         switch (action) {
-          case "boot": {
+          case "boot":
             return {
               success: true,
               action: "boot",
               auraVersion: window.AURA?.version ?? null,
-              auraState: window.AURA?.getState?.() ?? null
+              auraState: safeJsonClone(window.AURA?.getState?.() ?? null),
             };
-          }
 
-          case "state": {
+          case "state":
             return {
               success: true,
               action: "state",
-              auraState: window.AURA?.getState?.() ?? null,
-              loaderState: window.AURA?.engineLoader?.getState?.() ?? null
+              auraState: safeJsonClone(window.AURA?.getState?.() ?? null),
+              loaderState: safeJsonClone(window.AURA?.engineLoader?.getState?.() ?? null),
             };
-          }
 
-          case "manifest": {
+          case "manifest":
             return {
               success: true,
               action: "manifest",
-              manifest: window.AURA?.engineLoader?.getManifest?.() ?? null
+              manifest: safeJsonClone(window.AURA?.engineLoader?.getManifest?.() ?? null),
             };
-          }
 
           case "import": {
             const modulePath = normalizeModulePath(
               params.get("module") ?? params.get("path")
             );
-
-            const namespace = await import(modulePath);
+            const moduleUrl = new URL(modulePath, window.location.href).href;
+            const namespace = await import(moduleUrl);
 
             return {
               success: true,
@@ -278,7 +283,7 @@
               module: modulePath,
               exports: Object.keys(namespace),
               hasDefault: Object.prototype.hasOwnProperty.call(namespace, "default"),
-              defaultType: typeof namespace.default
+              defaultType: typeof namespace.default,
             };
           }
 
@@ -290,7 +295,7 @@
             }
 
             const result = await window.AURA.engineLoader.loadGroup(groupName, {
-              autoInitialize: String(params.get("autoInitialize") ?? "true") !== "false"
+              autoInitialize: String(params.get("autoInitialize") ?? "true") !== "false",
             });
 
             return {
@@ -299,7 +304,7 @@
               groupName: result.groupName,
               modules: result.modules.map((item) => item.moduleName),
               failedModules: result.failedModules.map((item) => item.moduleName),
-              durationMs: result.durationMs
+              durationMs: result.durationMs,
             };
           }
 
@@ -314,7 +319,7 @@
             }
 
             const namespace = await window.AURA.engineLoader.loadModule(groupName, moduleName, {
-              autoInitialize: String(params.get("autoInitialize") ?? "true") !== "false"
+              autoInitialize: String(params.get("autoInitialize") ?? "true") !== "false",
             });
 
             return {
@@ -323,7 +328,7 @@
               groupName,
               moduleName,
               exports: Object.keys(namespace ?? {}),
-              hasDefault: Boolean(namespace && Object.prototype.hasOwnProperty.call(namespace, "default"))
+              hasDefault: Boolean(namespace && Object.prototype.hasOwnProperty.call(namespace, "default")),
             };
           }
 
@@ -333,7 +338,7 @@
             }
 
             const result = await window.AURA.engineLoader.loadAll({
-              autoInitialize: String(params.get("autoInitialize") ?? "true") !== "false"
+              autoInitialize: String(params.get("autoInitialize") ?? "true") !== "false",
             });
 
             return {
@@ -341,7 +346,7 @@
               action: "load-all",
               groupCount: result.length,
               loadedModules: result.reduce((count, group) => count + group.modules.length, 0),
-              failedModules: result.reduce((count, group) => count + group.failedModules.length, 0)
+              failedModules: result.reduce((count, group) => count + group.failedModules.length, 0),
             };
           }
 
@@ -357,7 +362,7 @@
           render({
             ...result,
             timestamp: new Date().toISOString(),
-            executionTimeMs: elapsed
+            executionTimeMs: elapsed,
           });
 
           if (executionTime) {
@@ -374,7 +379,7 @@
             action,
             error: error instanceof Error ? error.message : String(error),
             timestamp: new Date().toISOString(),
-            executionTimeMs: elapsed
+            executionTimeMs: elapsed,
           });
 
           if (executionTime) {
